@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Symfony\Component\Mercure\Update;
 use App\Service\PostRequest\PostRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\Mercure\MercureCookieGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -17,9 +20,11 @@ class AppController extends AbstractController
     /**
      * @Route("/", name="app")
      */
-    public function index()
+    public function index(MercureCookieGenerator $cookieGenerator)
     {
-        return $this->render('base.html.twig');
+        $response = $this->render('base.html.twig');
+        $response->headers->setCookie($cookieGenerator->generate());
+        return $response;
     }
 
     /**
@@ -42,5 +47,13 @@ class AppController extends AbstractController
         return JsonResponse::fromJsonString($serializer->serialize(['token' => $token], 'json'));
     }
 
-
+    /**
+     * @Route("/mercure/test", name="test")
+     */
+    public function mercureTest(MessageBusInterface $bus)
+    {
+        $update = new Update('mercure/test', json_encode(['data' => 'Fonctionne !']));
+        $bus->dispatch($update);
+        return JsonResponse::fromJsonString(json_encode(['publish' => 'done']));
+    }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
+import { EventSourcePolyfill } from 'event-source-polyfill';
 import { Provider } from 'react-redux';
 import store from './store';
 import { connect } from 'react-redux';
@@ -14,6 +15,20 @@ class App extends React.Component
     constructor(props) {
         super(props);
 
+    }
+
+    componentDidMount = () => {
+        const url = new URL('http://localhost:3000/.well-known/mercure');
+        url.searchParams.append('topic', 'mercure/test');
+
+        const eventSource = new EventSourcePolyfill(url, {
+            withCredentials: true,
+        });
+        // const eventSource = new EventSource(url);
+        eventSource.onmessage = event => {
+            const data = JSON.parse(event.data);
+            alert(data.data);
+        }
     }
 
     render() {
