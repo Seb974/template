@@ -26,16 +26,9 @@ class MercureCookieGenerator
         return Cookie::fromString("
             mercureAuthorization = {$token}; 
             path = /.well-known/mercure; 
+            domain = fraispei.re;
+            secure; 
             httponly;
         ");
-
-              /* SERVER VERSION */
-        // return Cookie::fromString("
-        //     mercureAuthorization = {$token}; 
-        //     path = /.well-known/mercure; 
-        //     domain = clikeat.re;
-        //     secure; 
-        //     httponly;
-        // ");
     }
 }

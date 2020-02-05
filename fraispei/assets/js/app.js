@@ -18,7 +18,7 @@ class App extends React.Component
     }
 
     componentDidMount = () => {
-        const url = new URL('http://localhost:3000/.well-known/mercure');
+        const url = new URL('https://fraispei.re:3000/.well-known/mercure');
         url.searchParams.append('topic', 'mercure/test');
 
         const eventSource = new EventSourcePolyfill(url, {
