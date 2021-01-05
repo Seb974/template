@@ -16,7 +16,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "event-source-polyfill": "^1.0.12",
         "node-gyp": "^6.1.0",
         "prop-types": "^15.7.2",
